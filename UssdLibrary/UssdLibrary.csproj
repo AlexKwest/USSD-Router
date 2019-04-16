@@ -42,12 +42,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\Extensions.cs" />
+    <Compile Include="Model\Operators\Beeline.cs" />
+    <Compile Include="Model\Operators\Megafon.cs" />
+    <Compile Include="Model\Operators\MTS.cs" />
+    <Compile Include="Model\Operators\SlotAbstract.cs" />
+    <Compile Include="Model\Operators\Tele2.cs" />
+    <Compile Include="Model\RoutersModel.cs" />
     <Compile Include="UssdClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controller\" />
-    <Folder Include="Model\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Model\Example.json" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
