@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using UssdLibrary;
 using UssdLibrary.Model;
 using System.Collections;
-using Newtonsoft.Json;
+using UssdLibrary.Controller;
 using System.IO;
 
 namespace ConsoleView
@@ -15,62 +15,70 @@ namespace ConsoleView
     {
         static void Main(string[] args)
         {
-            RoutersModel routersModel = new RoutersModel();
-            routersModel.Routers.Add( new Router()
-            {
-                IP = "127.0.0.1",
-                Password = "123",
-                MedicalClinics = "ФитКлиник",
-                NameGSM = "GSM1",
-                OktellServer = "Ярославский",
-                TypeContracts = new Typecontract
+            #region TestData
+            Router routersModel = new Router(
+                "127.0.0.1",
+                "123",
+                "GSM1",
+                "Ярославский",
+                new Typecontract
                 {
                     BeelineSlot = new Beeline { MinBalance = "100", RegexBalance = "[0-9]" },
                     MegafonSlot = new Megafon { MinBalance = "100", RegexBalance = "[0-9]" },
                     MTSSlot = new MTS { MinBalance = "100", RegexBalance = "[0-9]" },
                     Tele2Slot = new Tele2 { MinBalance = "100", RegexBalance = "[0-9]" }
                 },
-                ModelSlots = new List<MobileOperator>()
+                new Modelslot
                 {
-                    MobileOperator.Beeline,
-                    MobileOperator.Megafon
-                }
-                //ModelSlots = new Modelslot()
-                //{
-                //    Lines = new List<string>
-                //    {
-                //        "qwe"
-                //    }
-                //},
-            });
+                    Lines = new SotOperator[]
+                    {
+                        SotOperator.Beeline,
+                        SotOperator.Megafon
+                    }
+                });
 
-            //foreach (var item in routersModel)
+            Router routersModel2 = new Router(
+                "127.0.0.2",
+                "123",
+                "GSM1",
+                "Ярославский",
+                new Typecontract
+                {
+                    BeelineSlot = new Beeline { MinBalance = "100", RegexBalance = "[0-9]" },
+                    MegafonSlot = new Megafon { MinBalance = "100", RegexBalance = "[0-9]" },
+                    MTSSlot = new MTS { MinBalance = "100", RegexBalance = "[0-9]" },
+                    Tele2Slot = new Tele2 { MinBalance = "100", RegexBalance = "[0-9]" }
+                },
+                new Modelslot
+                {
+                    Lines = new SotOperator[]
+                    {
+                                    SotOperator.Megafon,
+                                    SotOperator.Megafon
+                    }
+                });
+            Contract contract = new Contract("ФитКлиник", new Router[] { routersModel , routersModel2 });
+            Contract contract2 = new Contract("ПроКлиник", new Router[] { routersModel2, routersModel });
+            #endregion
+            ContractListController model = new ContractListController(new Contract[] { contract, contract2 });
+            model.Add(contract2);
+            model.Save();
+           // model.ClearSetting();
+            
+
+
+            //foreach (var item in routersModelDeserialized.Contracts)
             //{
-            //    Console.WriteLine(item);
+            //    foreach (var result in item.Routers)
+            //    {
+            //        Console.WriteLine($"{result.IP}");
+            //    }
+
             //}
 
-            var routersModelDeserialized = new RoutersModel();
 
-            using (FileStream fileStream = new FileStream("resultUSSD.json", FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite))
-            {
-                using (var sw = new StreamWriter(fileStream))
-                {
-                    sw.Write(JsonConvert.SerializeObject(routersModel));
-                }               
-            }
-            routersModelDeserialized = JsonConvert.DeserializeObject<RoutersModel>(File.ReadAllText(@"resultUSSD.json"));
-
-            using (StreamReader sr = new StreamReader("resultUSSD.json"))
-            {
-                JsonSerializer serializer = new JsonSerializer();
-                routersModelDeserialized = (RoutersModel)serializer.Deserialize(sr, typeof(RoutersModel));
-            }
-
-           
-               Console.WriteLine(routersModelDeserialized.Routers[0].IP);
-            
+            //Console.WriteLine(routersModelDeserialized.Routers[0].IP);
             Console.ReadLine();
-
         }
     }
 }

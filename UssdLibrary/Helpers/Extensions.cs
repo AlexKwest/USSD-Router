@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,6 +33,20 @@ namespace UssdLibrary.Helpers
                 dirInfo.Create();
             }
             return dirInfo.CreateSubdirectory(subpath).FullName;
+        }
+
+
+        public static bool CheckIP(this string ip)
+        {
+            try
+            {
+                IPAddress address = IPAddress.Parse(ip);
+            }
+            catch 
+            {
+                return false;
+            }
+            return true;
         }
 
         //TODO: Regex regex = new Regex("([-]?[Минус]?[0-9]+)[,.]?");
