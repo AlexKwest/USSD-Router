@@ -57,27 +57,68 @@ namespace ConsoleView
                                     SotOperator.Megafon
                     }
                 });
+
+            Router routersModel3 = new Router(
+                "127.0.0.3",
+                "123",
+                "GSM1",
+                "Ярославский",
+                new Typecontract
+                {
+                    BeelineSlot = new Beeline { MinBalance = "100", RegexBalance = "[0-9]" },
+                    MegafonSlot = new Megafon { MinBalance = "100", RegexBalance = "[0-9]" },
+                    MTSSlot = new MTS { MinBalance = "100", RegexBalance = "[0-9]" },
+                    Tele2Slot = new Tele2 { MinBalance = "100", RegexBalance = "[0-9]" }
+                },
+                new Modelslot
+                {
+                    Lines = new SotOperator[]
+                    {
+                                    SotOperator.Megafon,
+                                    SotOperator.Megafon
+                    }
+                });
+            Router routersModel4 = new Router(
+               "127.0.0.4",
+               "123",
+               "GSM1",
+               "Ярославский",
+               new Typecontract
+               {
+                   BeelineSlot = new Beeline { MinBalance = "100", RegexBalance = "[0-9]" },
+                   MegafonSlot = new Megafon { MinBalance = "100", RegexBalance = "[0-9]" },
+                   MTSSlot = new MTS { MinBalance = "100", RegexBalance = "[0-9]" },
+                   Tele2Slot = new Tele2 { MinBalance = "100", RegexBalance = "[0-9]" }
+               },
+               new Modelslot
+               {
+                   Lines = new SotOperator[]
+                   {
+                                    SotOperator.Megafon,
+                                    SotOperator.Megafon
+                   }
+               });
+
+
+
+
             Contract contract = new Contract("ФитКлиник", new Router[] { routersModel , routersModel2 });
-            Contract contract2 = new Contract("ПроКлиник", new Router[] { routersModel2, routersModel });
+            Contract contract2 = new Contract("ПроКлиник", new Router[] { routersModel3, routersModel4 });
             #endregion
-            ContractListController model = new ContractListController(new Contract[] { contract, contract2 });
+            ContractController model = new ContractController();
             model.Add(contract2);
-            model.Save();
-           // model.ClearSetting();
-            
+            model.Add(contract);
 
+            var resultContract = model.GetContract("ФитКлиник");
+            var resultRouter = model.GetRouter("127.0.0.2");
 
-            //foreach (var item in routersModelDeserialized.Contracts)
+            Console.WriteLine(resultRouter);
+            //foreach(var item in resultContract)
             //{
-            //    foreach (var result in item.Routers)
-            //    {
-            //        Console.WriteLine($"{result.IP}");
-            //    }
-
+            //    Console.WriteLine(item);
             //}
 
 
-            //Console.WriteLine(routersModelDeserialized.Routers[0].IP);
             Console.ReadLine();
         }
     }

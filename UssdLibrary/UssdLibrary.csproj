@@ -46,7 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controller\ContractListController.cs" />
+    <Compile Include="Controller\ContractController.cs" />
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Model\Operators\Beeline.cs" />
     <Compile Include="Model\Operators\Megafon.cs" />

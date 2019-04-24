@@ -38,6 +38,11 @@ namespace UssdLibrary.Helpers
 
         public static bool CheckIP(this string ip)
         {
+            if (string.IsNullOrWhiteSpace(ip))
+            {
+                throw new ArgumentException("message", nameof(ip));
+            }
+
             try
             {
                 IPAddress address = IPAddress.Parse(ip);

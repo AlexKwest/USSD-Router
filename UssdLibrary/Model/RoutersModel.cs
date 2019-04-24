@@ -9,30 +9,7 @@ using UssdLibrary.Helpers;
 
 namespace UssdLibrary.Model
 {
-    /// <summary>
-    /// Список Контрактов
-    /// </summary>
-    public class ContractList
-    {
-        public Contract[] Contracts { get; set; }
-
-        public ContractList()
-        {
-
-        }
-        /// <summary>
-        /// Список
-        /// </summary>
-        /// <param name="contracts">Массив контрактов с сотовыми операторами</param>
-        public ContractList(Contract[] contracts)
-        {
-            Contracts = contracts ?? throw new ArgumentNullException(nameof(contracts));
-        }
-    }
-    /// <summary>
-    /// Контракт
-    /// </summary>
-    public class Contract
+    public class Contract : IEquatable<Contract>//, IEnumerable
     {
         public string NameContract { get; set; }
         public Router[] Routers { get; set; }
@@ -41,27 +18,61 @@ namespace UssdLibrary.Model
         {
 
         }
-        /// <summary>
-        /// Конкретный контракт с сотовым оператором
-        /// </summary>
-        /// <param name="nameContract"></param>
-        /// <param name="routers">Список Роутеров</param>
-        public Contract(string nameContract, Router[] routers)
+        public Contract(string nameContract)
         {
             #region CheckParameter
             if (string.IsNullOrWhiteSpace(nameContract))
             {
                 throw new ArgumentNullException("Имя Договора на обслуживание сотовым оператором не может быть пустым", nameof(nameContract));
             }
+            #endregion
+            NameContract = nameContract;
+        }
+        /// <summary>
+        /// Конкретный контракт с сотовым оператором
+        /// </summary>
+        /// <param name="nameContract"></param>
+        /// <param name="routers">Список Роутеров</param>
+        public Contract(string nameContract, Router[] routers) : this(nameContract)
+        {
+            #region CheckParameter
             if (routers == null)
             {
                 throw new ArgumentNullException(nameof(routers));
             }
             #endregion
 
-            NameContract = nameContract;
             Routers = routers;
         }
+
+        public bool Equals(Contract x, Contract y)
+        {
+            return x.NameContract == y.NameContract;
+        }
+
+        public int GetHashCode(Contract obj)
+        {
+            return Convert.ToInt32(Encoding.Default.GetBytes(obj.NameContract));
+        }
+
+        public bool Equals(Contract other)
+        {
+            if (other == null) return false;
+            return (this.NameContract.Equals(other.NameContract));
+        }
+
+        //public IEnumerator<Router> GetEnumerator()
+        //{
+        //    foreach (var item in Routers)
+        //    {
+        //        yield return item;
+        //    }
+        //}
+
+        //IEnumerator IEnumerable.GetEnumerator()
+        //{
+        //    return this.GetEnumerator();
+        //}
     }
 
     //public class RoutersModel// : IEnumerable
@@ -99,7 +110,6 @@ namespace UssdLibrary.Model
     {
         public string IP { get; set; } 
         public string Password { get; set; }
-        public string MedicalClinics { get; set; } 
         public string NameGSM { get; set; } 
         public string OktellServer { get; set; } 
         public Typecontract TypeContracts { get; set; }
@@ -115,7 +125,7 @@ namespace UssdLibrary.Model
         /// <param name="oktellServer">Сервер Oktell</param>
         /// <param name="typeContracts">Тип договора по Операторам связи</param>
         /// <param name="modelSlots">В каких слотах какие симкарты</param>
-        public Router(string ip, string password, string nameGSM, string oktellServer , Typecontract typeContracts, Modelslot modelSlots)
+        public Router(string ip, string password, string nameGSM, string oktellServer , Typecontract typeContracts, Modelslot modelSlots)// : this (ip)
         {
             #region CheckParametrs
             if (!ip.CheckIP())
@@ -148,13 +158,30 @@ namespace UssdLibrary.Model
                 throw new ArgumentNullException("Модель симкарт не может быть пустой", nameof(modelSlots));
             }
             #endregion
-
             IP = ip;
+
             Password = password;
             NameGSM = nameGSM;
             OktellServer = oktellServer;
             TypeContracts = typeContracts;
             ModelSlots = modelSlots;
+        }
+        public Router()
+        {
+            
+        }
+        //public Router(string ip)
+        //{
+        //    if (!ip.CheckIP())
+        //    {
+        //        throw new ArgumentException("Неверно задан IP адрес роутера", nameof(ip));
+        //    }
+        //    IP = ip;
+        //}
+
+        public override string ToString()
+        {
+            return $"{IP} {OktellServer} {NameGSM}";
         }
     }
 
