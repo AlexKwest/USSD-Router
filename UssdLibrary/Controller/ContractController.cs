@@ -84,15 +84,29 @@ namespace UssdLibrary.Controller
         /// <returns>bool</returns>
         public bool DeleteRouter(string ip)
         {
+            GetRouter(ip);
             try
             {
-                CurrentContract.Routers.Remove(GetRouter(ip));
-                Contracts.Remove(CurrentContract);
-                Contracts.Add(CurrentContract);
-                Save();
-                return true;
+                if (!IsNewRouter)
+                {
+                    CurrentContract.Routers.Remove(CurrentRouter);
+                    Contracts.Remove(CurrentContract);
+                    Contracts.Add(CurrentContract);
+                    Save();
+                    return true;
+                }
+                //else
+                //{
+                    throw new ArgumentException("Роутера с таким IP в этом контракте не существует", nameof(ip));
+                    //TODO: DoSomeThing();
+                //}
             }
-            catch
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+            catch (Exception)
             {
                 return false;
             }
@@ -107,10 +121,16 @@ namespace UssdLibrary.Controller
         {
             try
             {
-                Contracts.Remove(GetContract(CurrentContract.NameContract));
-                CurrentContract = new Contract();
-                Save();
-                return true;
+                if (CurrentContract != null)
+                {
+                    Contracts.Remove(CurrentContract);
+                    Save();
+                    return true;
+                }
+                else
+                {
+                    throw new ArgumentNullException("Этот контракт уже был удалён", nameof(CurrentContract));
+                }
             }
             catch
             {
@@ -138,8 +158,10 @@ namespace UssdLibrary.Controller
             }
             if (CurrentContract == null)
             {
-                IsNewContract = true;
                 CurrentContract = new Contract(nameContract);
+                Contracts.Add(CurrentContract);
+                IsNewContract = true;
+                Save();
             }
             return CurrentContract;
         }

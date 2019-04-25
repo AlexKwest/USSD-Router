@@ -122,12 +122,12 @@ namespace ConsoleView
                    }
                });
 
-            Contract contract = new Contract("ПирсКлиник", new List<Router> { routersModel , routersModel2 });
+            Contract contract = new Contract("ПирсКлиник", new List<Router> { routersModel, routersModel2 });
             Contract contract2 = new Contract("ПроКлиник", new List<Router> { routersModel5, routersModel4 });
             #endregion
 
             Console.WriteLine("Введите имя контракта");
-            string contractName = "ПирсКлиник242";
+            string contractName = "ПирсКлиник7000";
 
             ContractController modelNew = new ContractController(contractName);
             modelNew.AddNewRouter(routersModel3.IP, routersModel3.Password, routersModel3.NameGSM, routersModel3.OktellServer, routersModel3.TypeContracts, routersModel3.ModelSlots);
@@ -138,9 +138,12 @@ namespace ConsoleView
                 Console.WriteLine(item);
             }
             Console.WriteLine(new String('-', 30));
-        //    modelNew.DeleteRouter("127.0.0.3");
-        //    modelNew.DeleteContract();
-            foreach(var item in modelNew.Contracts)
+            modelNew.DeleteRouter("127.0.0.3");
+
+            //  modelNew.DeleteContract();
+
+
+            foreach (var item in modelNew.Contracts)
             {
                 Console.WriteLine(item);
             }
