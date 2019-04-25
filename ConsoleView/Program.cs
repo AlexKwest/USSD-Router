@@ -16,6 +16,7 @@ namespace ConsoleView
         static void Main(string[] args)
         {
             #region TestData
+
             Router routersModel = new Router(
                 "127.0.0.1",
                 "123",
@@ -78,6 +79,7 @@ namespace ConsoleView
                                     SotOperator.Megafon
                     }
                 });
+
             Router routersModel4 = new Router(
                "127.0.0.4",
                "123",
@@ -99,25 +101,42 @@ namespace ConsoleView
                    }
                });
 
+            Router routersModel5 = new Router(
+               "127.0.0.5",
+               "123",
+               "GSM1",
+               "Ярославский",
+               new Typecontract
+               {
+                   BeelineSlot = new Beeline { MinBalance = "100", RegexBalance = "[0-9]" },
+                   MegafonSlot = new Megafon { MinBalance = "100", RegexBalance = "[0-9]" },
+                   MTSSlot = new MTS { MinBalance = "100", RegexBalance = "[0-9]" },
+                   Tele2Slot = new Tele2 { MinBalance = "100", RegexBalance = "[0-9]" }
+               },
+               new Modelslot
+               {
+                   Lines = new SotOperator[]
+                   {
+                                    SotOperator.Megafon,
+                                    SotOperator.Megafon
+                   }
+               });
 
-
-
-            Contract contract = new Contract("ФитКлиник", new Router[] { routersModel , routersModel2 });
-            Contract contract2 = new Contract("ПроКлиник", new Router[] { routersModel3, routersModel4 });
+            Contract contract = new Contract("ПирсКлиник", new List<Router> { routersModel , routersModel2 });
+            Contract contract2 = new Contract("ПроКлиник", new List<Router> { routersModel5, routersModel4 });
             #endregion
-            ContractController model = new ContractController();
-            model.Add(contract2);
-            model.Add(contract);
 
-            var resultContract = model.GetContract("ФитКлиник");
-            var resultRouter = model.GetRouter("127.0.0.2");
+            Console.WriteLine("Введите имя контракта");
+            string contractName = "ПирсКлиник";
 
-            Console.WriteLine(resultRouter);
-            //foreach(var item in resultContract)
-            //{
-            //    Console.WriteLine(item);
-            //}
+            ContractController modelNew = new ContractController(contractName);
+            modelNew.AddNewRouter(routersModel3.IP, routersModel3.Password, routersModel3.NameGSM, routersModel3.OktellServer, routersModel3.TypeContracts, routersModel3.ModelSlots);
 
+            modelNew.Add(contract2);
+            foreach(var item in modelNew.Contracts)
+            {
+                Console.WriteLine(item);
+            }
 
             Console.ReadLine();
         }

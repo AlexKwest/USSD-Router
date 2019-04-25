@@ -12,7 +12,7 @@ namespace UssdLibrary.Model
     public class Contract : IEquatable<Contract>//, IEnumerable
     {
         public string NameContract { get; set; }
-        public Router[] Routers { get; set; }
+        public List<Router> Routers { get; set; } = new List<Router>();
 
         public Contract()
         {
@@ -33,7 +33,7 @@ namespace UssdLibrary.Model
         /// </summary>
         /// <param name="nameContract"></param>
         /// <param name="routers">Список Роутеров</param>
-        public Contract(string nameContract, Router[] routers) : this(nameContract)
+        public Contract(string nameContract, List<Router> routers) : this(nameContract)
         {
             #region CheckParameter
             if (routers == null)
@@ -61,6 +61,15 @@ namespace UssdLibrary.Model
             return (this.NameContract.Equals(other.NameContract));
         }
 
+        public override string ToString()
+        {
+            String stringValue = "";
+            foreach (var router in Routers)
+            {
+                stringValue += router.ToString() + "\n";
+            }
+            return $"{NameContract} \n {stringValue}";
+        }
         //public IEnumerator<Router> GetEnumerator()
         //{
         //    foreach (var item in Routers)
@@ -183,6 +192,11 @@ namespace UssdLibrary.Model
         {
             return $"{IP} {OktellServer} {NameGSM}";
         }
+
+        //public static string operator + (Router router1, Router router2)
+        //{
+        //    return $"{router1.IP} {router1.OktellServer} {router1.NameGSM} \n {router2.IP} {router2.OktellServer} {router2.NameGSM}";
+        //}
     }
 
     public class Typecontract

@@ -15,6 +15,7 @@ namespace UssdLibrary.Controller
     {
         static readonly string FILE_PATH = "configuration.json";
         public Contract CurrentContract { get; set; }
+        public Router CurrentRouter { get; private set; } = default;
         public bool IsNewContract { get; private set; } = false;
         public bool IsNewRouter { get; private set; } = false;
 
@@ -28,7 +29,25 @@ namespace UssdLibrary.Controller
                 Contracts = GetContractData();
             }
         }
+        public ContractController(string contractName): this ()
+        {
+            GetContract(contractName);
+        }
 
+        public void AddNewRouter(string ip, string password, string nameGSM, string oktellServer, Typecontract typeContracts, Modelslot modelSlots)
+        {
+            GetRouter(ip);
+            if (IsNewRouter)
+            {
+                Contracts.Remove(CurrentContract);
+                CurrentContract.Routers.Add(new Router(ip, password, nameGSM, oktellServer, typeContracts, modelSlots));
+                Add(CurrentContract);
+            }
+            else
+            {
+                //TODO: Запрос на изменение данных старого Роутера
+            }
+        }
         public void Add(Contract itemContract)
         {
             if (itemContract == null)
@@ -38,7 +57,7 @@ namespace UssdLibrary.Controller
 
             if (Contracts.Contains(itemContract))
             {
-                //TODO : Что-то сделать
+                //TODO : Запрос на изменение данных старого Контракта
             }
             else
             {
@@ -91,11 +110,9 @@ namespace UssdLibrary.Controller
         /// <returns>Router</returns>
         public Router GetRouter(string ip)
         {
-            Router result;
-
             if (ip.CheckIP())
             {
-                result = (from contract in Contracts
+                CurrentRouter = (from contract in Contracts
                           let routers = contract.Routers
                           let router = (from item in routers
                                         where item.IP == ip
@@ -103,20 +120,19 @@ namespace UssdLibrary.Controller
                           where router != null
                           select router).SingleOrDefault();
 
-                if (result != null)
+                if (CurrentRouter != null)
                 {
                     IsNewRouter = false;
                 }
                 else
                 {
                     IsNewRouter = true;
-                    result = new Router();
+                    CurrentRouter = new Router();
                 }
-                return result;
+                return CurrentRouter;
             }
             throw new ArgumentException("Неправильно задан IP адрес", nameof(ip));
         }
-
         /// <summary>
         /// Загрузить Контракты из JSON файла
         /// </summary>
