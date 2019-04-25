@@ -127,12 +127,19 @@ namespace ConsoleView
             #endregion
 
             Console.WriteLine("Введите имя контракта");
-            string contractName = "ПирсКлиник";
+            string contractName = "ПирсКлиник242";
 
             ContractController modelNew = new ContractController(contractName);
             modelNew.AddNewRouter(routersModel3.IP, routersModel3.Password, routersModel3.NameGSM, routersModel3.OktellServer, routersModel3.TypeContracts, routersModel3.ModelSlots);
 
-            modelNew.Add(contract2);
+            modelNew.AddContract(contract2);
+            foreach (var item in modelNew.Contracts)
+            {
+                Console.WriteLine(item);
+            }
+            Console.WriteLine(new String('-', 30));
+        //    modelNew.DeleteRouter("127.0.0.3");
+        //    modelNew.DeleteContract();
             foreach(var item in modelNew.Contracts)
             {
                 Console.WriteLine(item);

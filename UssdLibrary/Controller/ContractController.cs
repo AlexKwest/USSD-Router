@@ -14,7 +14,7 @@ namespace UssdLibrary.Controller
     public class ContractController
     {
         static readonly string FILE_PATH = "configuration.json";
-        public Contract CurrentContract { get; set; }
+        public Contract CurrentContract { get; set; } = new Contract();
         public Router CurrentRouter { get; private set; } = default;
         public bool IsNewContract { get; private set; } = false;
         public bool IsNewRouter { get; private set; } = false;
@@ -41,14 +41,14 @@ namespace UssdLibrary.Controller
             {
                 Contracts.Remove(CurrentContract);
                 CurrentContract.Routers.Add(new Router(ip, password, nameGSM, oktellServer, typeContracts, modelSlots));
-                Add(CurrentContract);
+                AddContract(CurrentContract);
             }
             else
             {
                 //TODO: Запрос на изменение данных старого Роутера
             }
         }
-        public void Add(Contract itemContract)
+        public void AddContract(Contract itemContract)
         {
             if (itemContract == null)
             {
@@ -65,7 +65,7 @@ namespace UssdLibrary.Controller
                 Save();
             }
         }
-        public void Add(Contract[] itemsContract)
+        public void AddContract(Contract[] itemsContract)
         {
             if (itemsContract == null)
             {
@@ -77,6 +77,46 @@ namespace UssdLibrary.Controller
             }
         }
 
+        /// <summary>
+        /// Удаление роутера у текущего экземпляра контракта
+        /// </summary>
+        /// <param name="ip">IP Роутера</param>
+        /// <returns>bool</returns>
+        public bool DeleteRouter(string ip)
+        {
+            try
+            {
+                CurrentContract.Routers.Remove(GetRouter(ip));
+                Contracts.Remove(CurrentContract);
+                Contracts.Add(CurrentContract);
+                Save();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+            
+        }
+
+        /// <summary>
+        /// Удаление текущего экземпляра контракта
+        /// </summary>
+        /// <returns>bool</returns>
+        public bool DeleteContract()
+        {
+            try
+            {
+                Contracts.Remove(GetContract(CurrentContract.NameContract));
+                CurrentContract = new Contract();
+                Save();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
         /// <summary>
         /// Получаем Контракт по Имени договора.
         /// Если он не найден то возвращает новый. IsNewContract = true

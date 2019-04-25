@@ -11,7 +11,7 @@ namespace UssdLibrary.Model
 {
     public class Contract : IEquatable<Contract>//, IEnumerable
     {
-        public string NameContract { get; set; }
+        public string NameContract { get; set; } //= default; 
         public List<Router> Routers { get; set; } = new List<Router>();
 
         public Contract()
