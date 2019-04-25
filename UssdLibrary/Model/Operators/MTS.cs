@@ -8,5 +8,6 @@ namespace UssdLibrary.Model
 {
     public class MTS: SlotAbstract
     {
+       
     }
 }

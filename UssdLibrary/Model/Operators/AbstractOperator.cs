@@ -11,6 +11,24 @@ namespace UssdLibrary.Model
         public string MinBalance { get;  set; }
         public string RegexBalance { get;  set; }
 
+        public override bool Equals(object obj)
+        {
+            var other = obj as SlotAbstract;
+            if (
+                       this.MinBalance == other.MinBalance
+                    && this.RegexBalance == other.RegexBalance
+                )
+                return true;
+            return false;
+        }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+        public override string ToString()
+        {
+            return $"{this.GetType().Name} {MinBalance} {RegexBalance}";
+        }
         //public SlotAbstract(string minBalance, string regexBalance)
         //{
         //    this.MinBalance = minBalance;

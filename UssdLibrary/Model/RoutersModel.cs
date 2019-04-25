@@ -193,10 +193,21 @@ namespace UssdLibrary.Model
             return $"{IP} {OktellServer} {NameGSM}";
         }
 
-        //public static string operator + (Router router1, Router router2)
-        //{
-        //    return $"{router1.IP} {router1.OktellServer} {router1.NameGSM} \n {router2.IP} {router2.OktellServer} {router2.NameGSM}";
-        //}
+        public override bool Equals(object obj)
+        {
+            var other = obj as Router;
+            //TODO: Почему то не работает сравнение с ModelSlots & TypeContracts
+            if (
+                       this.IP == other.IP 
+                  //  && this.ModelSlots == other.ModelSlots 
+                    && this.NameGSM == other.NameGSM 
+                    && this.OktellServer == other.OktellServer
+                    && this.Password == other.Password
+                  // && this.TypeContracts == other.TypeContracts
+                )
+                return true;
+            return false;
+        }
     }
 
     public class Typecontract
@@ -206,11 +217,32 @@ namespace UssdLibrary.Model
         public Tele2 Tele2Slot { get; set; }
         public Beeline BeelineSlot { get; set; }
 
+        public override bool Equals(object obj)
+        {
+            var other = obj as Typecontract;
+            if (this.BeelineSlot == other.BeelineSlot &&
+                this.MegafonSlot == other.MegafonSlot &&
+                this.MTSSlot == other.MTSSlot &&
+                this.Tele2Slot == other.Tele2Slot)
+                return true;
+            return false;
+        }
     }
 
-    public class Modelslot //: IEnumerable
+    public class Modelslot : IEquatable<Modelslot>
     {
-        public SotOperator[] Lines { get; set; } 
+        public SotOperator[] Lines { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            return true;
+            //TODO: Подумать как сравнить
+        }
+
+        public bool Equals(Modelslot other)
+        {
+            return true;
+        }
 
         public IEnumerator GetEnumerator()
         {

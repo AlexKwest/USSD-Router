@@ -48,6 +48,11 @@ namespace UssdLibrary.Controller
                 //TODO: Запрос на изменение данных старого Роутера
             }
         }
+        public void AddNewRouter(Router router)
+        {
+            AddNewRouter(router.IP, router.Password, router.NameGSM, router.OktellServer, router.TypeContracts, router.ModelSlots);
+        }
+
         public void AddContract(Contract itemContract)
         {
             if (itemContract == null)

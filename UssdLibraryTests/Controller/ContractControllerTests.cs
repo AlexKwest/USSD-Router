@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UssdLibrary.Model;
 
 namespace UssdLibrary.Controller.Tests
 {
@@ -26,7 +27,32 @@ namespace UssdLibrary.Controller.Tests
         [TestMethod()]
         public void AddNewRouterTest()
         {
-            Assert.Fail();
+            var contractName = "ПроМед";
+            var ip = "127.0.0.50";
+            Router routerControl = new Router(
+               ip,
+               "123",
+               "GSM1",
+               "Ярославский",
+               new Typecontract
+               {
+                   BeelineSlot = new Beeline { MinBalance = "100", RegexBalance = "[0-9]" },
+                   MegafonSlot = new Megafon { MinBalance = "100", RegexBalance = "[0-9]" },
+                   MTSSlot = new MTS { MinBalance = "100", RegexBalance = "[0-9]" },
+                   Tele2Slot = new Tele2 { MinBalance = "100", RegexBalance = "[0-9]" }
+               },
+               new Modelslot
+               {
+                   Lines = new SotOperator[]
+                   {
+                        SotOperator.Beeline,
+                        SotOperator.Megafon
+                   }
+               });
+
+            var controller = new ContractController(contractName);
+            controller.AddNewRouter(routerControl);
+            Assert.AreEqual(controller.CurrentRouter, routerControl);
         }
 
         [TestMethod()]
